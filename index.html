@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysian Demographics and Economy: A Comprehensive Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script src="map.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a5f7a;
+            --secondary-color: #3498db;
+            --accent-color: #000000;
+            --background-color: #f0f8ff;
+            --text-color: #333333;
+            --light-text-color: #7f8c8d;
+            --population-color: #f34208;
+        }
+    
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+    
+        .page {
+            max-width: 1100px;
+            background-color: white;
+            margin: auto;
+            padding: 50px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+    
+        h1, h2, h3, .main-title, .section-title, .subsection-title {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.3;
+        }
+    
+        .main-title {
+            font-size: 3em;
+            font-style: 'Times New Roman';
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px double var(--primary-color);
+        }
+    
+        .section-title {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-top: 60px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 20px;
+        }
+    
+        .subsection-title {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+    
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            max-width: 70ch;
+        }
+    
+        .storytelling {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    
+        .storytelling p {
+            margin-bottom: 15px;
+        }
+    
+        .annotation {
+            background-color: #e9ecef;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin-top: 20px;
+        }
+    
+        .annotation p {
+            margin: 0;
+            font-style: italic;
+            color: #555;
+        }
+    
+        .highlight {
+            background-color: #e6f3ff;
+            padding: 20px;
+            border-left: 4px solid var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+    
+        .key-insight {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+    
+        .vis-description {
+            font-style: italic;
+            color: var(--light-text-color);
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+    
+        .analysis-section {
+            background-color: var(--background-color);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 5px solid var(--secondary-color);
+        }
+    
+        .analysis-section ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+    
+        .analysis-section li {
+            margin-bottom: 10px;
+        }
+    
+        .metadata {
+            background-color: #eef2f7;
+            padding: 20px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+    
+        .metadata-section {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--background-color);
+            padding: 15px;
+            border-radius: 5px;
+        }
+    
+        .metadata-section h3 {
+            font-family: 'Times New Roman', Times, serif;
+            color: #333;
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+    
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 15px;
+        }
+    
+        .metadata-label {
+            font-weight: bold;
+            color: #333;
+        }
+    
+        .metadata-value {
+            color: #555;
+        }
+    
+        .vis-container {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+    
+        .description-left {
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--background-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+    
+        .emphasis {
+            color: var(--population-color);
+            font-weight: bold;
+        }
+    
+        .date {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    
+        .region {
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+    
+        ul {
+            padding-left: 20px;
+        }
+    
+        ul ul {
+            margin-top: 5px;
+        }
+    
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+    
+        .content {
+            flex: 3;
+        }
+    
+        .interaction-note {
+            font-style: italic;
+            color: #2980b9;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e8f4f8;
+        }
+
+
+        
+    </style>
+</head>
+<body>
+    <div class="page">
+        <h1 class="main-title">Malaysian Demographics and Economy: A Comprehensive Analysis</h1>
+        
+        <div class="pure-g">
+            <div class="pure-u-1-2">
+                <div id="vis" class="vis-container"></div>
+            </div>
+
+           
+
+                
+            
+            <div class="pure-u-1-2">
+                <div class="analysis-section">
+                    <h2 class="subsection-title">Malaysian Districts Population</h2>
+
+                    <div class="content-wrapper">
+
+                        <div class="content">
+                            <p>This visualization presents the <span class="emphasis">population distribution</span> across Malaysian districts from <span >2020 to 2023</span>, revealing:</p>
+                            <ul>
+                                <li><strong>Demographic Shifts:</strong> Highlighting changes in population density.</li>
+                                <li><strong>Regional Variations:</strong> Showcasing differences between:
+                                    <ul>
+                                        <li class="region">Peninsular Malaysia</li>
+                                        <li class="region">Sabah</li>
+                                        <li class="region">Sarawak</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        
+                        
+                        <div class="metadata-section">
+                            <h3>Metadata</h3>
+                            <div class="metadata-grid">
+                                <div class="metadata-label">Data Source:</div>
+                                <div class="metadata-value"><a href="https://data.gov.my/data-catalogue/population_state"> Population </a> and <a href="https://data.gov.my/data-catalogue/births_annual_sex_ethnic">Birth</a></div>
+
+                                
+                                <div class="metadata-label">Time Period:</div>
+                                <div class="metadata-value">2020-2023</div>
+                                
+                                <div class="metadata-label">Last Updated:</div>
+                                <div class="metadata-value">October 2023</div>
+                                
+                                <div class="metadata-label">Analyst:</div>
+                                <div class="metadata-value">Lim Jun Kee</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <h2 class="subsection-title">Additional Information</h2>
+                    <div id="vis3"></div>
+
+                    <div class="storytelling-section">
+                        <h3>Key Insights: Malaysia Birth Rates (2020-2022)</h3>
+                        <ul>
+                            <li><span class="key-insight">Overall Trend:</span> Birth rates show a general decline across most ethnic groups from 2020 to 2022, possibly influenced by socioeconomic factors and the global pandemic.</li>
+                            <li><span class="key-insight">Ethnic Variations:</span> Other citizen consistently displays the highest birth rates across all years, followed by <span style="font-weight: bold;">Bumiputera</span> groups. <span style="font-weight: bold;">Chinese</span> and <span style="font-weight: bold;">Indian</span> communities show lower rates comparatively.</li>
+                            <li><span class="key-insight">Gender Disparity:</span> <span style="color: #31C0D0; font-weight: bold;">Male</span> birth rates are slightly higher than <span style="color: #F1A957; font-weight: bold;">female</span> rates across most ethnic groups, a common biological trend observed globally.</li>
+                            <li><span class="key-insight">Gender-Specific Trends:</span>
+                                <ul>
+                                    <li><span style="color: #31C0D0; font-weight: bold;">Male</span> birth rates show more pronounced fluctuations year-to-year, particularly in the Other citizen category.</li>
+                                    <li><span style="color: #F1A957; font-weight: bold;">Female</span> birth rates tend to be more stable across the years, with less dramatic changes.</li>
+                                </ul>
+                            </li>
+                            <li><span class="key-insight">Temporal Changes:</span> The most significant drop in both <span style="color: #31C0D0; font-weight: bold;">male</span> and <span style="color: #F1A957; font-weight: bold;">female</span> birth rates is observed between 2020 and 2021, potentially reflecting the immediate impact of the COVID-19 pandemic on family planning decisions.</li>
+                            <li><span class="key-insight">Policy Implications:</span> These trends suggest a need for targeted demographic policies, considering:
+                                <ul>
+                                    <li>The varying birth rates among different ethnic groups</li>
+                                    <li>The consistent gender disparity favoring <span style="color: #31C0D0; font-weight: bold;">male</span> births</li>
+                                    <li>The overall declining trend for both <span style="color: #31C0D0; font-weight: bold;">male</span> and <span style="color: #F1A957; font-weight: bold;">female</span> birth rates</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="pure-g">
+            <div class="pure-u-1-1">
+
+                
+                <div class="vis-container">
+                    <h3 class="subsection-title">Monthly Income Trends by State</h3>
+                    <div id="vis2"></div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3 class="subsection-title">Income Trends and State-wise Comparisons (2019-2020)</h3>
+                    <ul class="analysis-list">
+                        <li>The scatter plot reveals <span class="key-insight">significant income disparities</span> across Malaysian states over time:
+                            <ul>
+                                <li><span style="color: #ed7d31; font-weight: bold;">Selangor</span> consistently leads the pack, with its diverse economy and proximity to the capital contributing to high average incomes.</li>
+                                <li>In contrast, states like <span style="color: #f26d5b; font-weight: bold;">Kelantan</span> and <span style="color: #b2b2b2; font-weight: bold;">Sabah</span> often cluster at the lower end, highlighting regional economic imbalances.</li>
+                            </ul>
+                        </li>
+                        <li><span class="key-insight">Temporal trends</span> show gradual increases in average income from 2019 to 2020 for most states, suggesting overall economic growth despite fluctuations:
+                            <ul>
+                                <li><span style="color: #6b90c3; font-weight: bold;">Johor</span> demonstrates a steady upward trajectory, likely due to its strong manufacturing and services sectors.</li>
+                                <li><span style="color: #b08655; font-weight: bold;">Pulau Pinang</span> shows resilience with consistent growth, powered by its robust electronics and tech industries.</li>
+                            </ul>
+                        </li>
+                        <li>The bar chart emphasizes that <span class="key-insight">urban centers and federal territories</span> dominate the top income brackets:
+                            <ul>
+                                <li><span style="color: #4bacc6; font-weight: bold;">W.P. Kuala Lumpur</span> leads with the highest average income, benefiting from its status as the national capital and financial hub.</li>
+                                <li><span style="color: #ffd966; font-weight: bold;">W.P. Putrajaya</span>, as the federal administrative center, shows high income levels, reflecting the concentration of government jobs.</li>
+                                <li><span style="color: #90bf5e; font-weight: bold;">W.P. Labuan</span>, despite its small size, ranks high due to its importance as an offshore financial center.</li>
+                            </ul>
+                        </li>
+                        <li>A notable <span class="key-insight">income gap</span> exists between top-performing states and others:
+                            <ul>
+                                <li>The disparity between <span style="color: #ed7d31; font-weight: bold;">Selangor</span> and states like <span style="color: #f9a55b; font-weight: bold;">Kedah</span> highlights the uneven distribution of economic development.</li>
+                                <li><span style="color: #f9e555; font-weight: bold;">Pahang</span>, despite its size and natural resources, shows a middling income level, suggesting potential for economic diversification.</li>
+                            </ul>
+                        </li>
+                        <li>Some states exhibit <span class="key-insight">higher income volatility</span>:
+                            <ul>
+                                <li><span style="color: #83ccd2; font-weight: bold;">Melaka</span> shows fluctuations, possibly due to its reliance on tourism, which is sensitive to external factors.</li>
+                                <li><span style="color: #5b9bd5; font-weight: bold;">Sarawak</span>'s data points are more scattered, potentially reflecting its diverse economy ranging from agriculture to energy sectors.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p class="interaction-note">Note: You can interact with the scatter plot by dragging a box around specific data points. The bar chart below will dynamically update to show the filtered average incomes, allowing for detailed exploration of specific time periods or income ranges.</p>
+
+
+                </div>
+
+                <div class="metadata">
+                    <h3>Metadata</h3>
+                    <div class="metadata-grid">
+                        <div class="metadata-label">Data Source:</div>
+                        <div class="metadata-value"><a href="https://data.gov.my/data-catalogue/hies_state_percentile"> Monthly Income </a></div>
+                        
+                        <div class="metadata-label">Time Period:</div>
+                        <div class="metadata-value">2019-2020</div>
+                        
+                        <div class="metadata-label">Last Updated:</div>
+                        <div class="metadata-value">October 2023</div>
+                        
+                        <div class="metadata-label">Analyst:</div>
+                        <div class="metadata-value">Lim Jun Kee</div>
+                    </div>
+                </div>
+                
+                <div class="vis-container">
+                    <h3 class="subsection-title">Top 6 States by Average Income</h3>
+                    <div id="vis4"></div>
+                </div>
+                
+
+                
+                <div class="analysis-section">
+                    <h3 class="subsection-title">Key Insights and Analysis</h3>
+                    <ul>
+                        <li><span style="color: #ed7d31; font-weight: bold;">Selangor</span> consistently demonstrates the highest income levels, reflecting its status as a major economic hub. Its sustained performance suggests a diverse and robust economy.</li>
+                        <li>A significant <span class="key-insight">income gap</span> persists between urban and rural areas, highlighting potential areas for targeted economic development initiatives. This disparity poses both challenges and opportunities for policymakers.</li>
+                        <li>The concentration of high incomes in <span class="key-insight">federal territories and developed regions</span> underscores the challenge of achieving balanced nationwide growth. It raises questions about resource allocation and the need for strategies to boost lagging regions.</li>
+                    </ul>
+
+                </div>
+                
+
+                <div class="metadata">
+                    <h3>Metadata</h3>
+                    <div class="metadata-grid">
+                        <div class="metadata-label">Data Source:</div>
+                        <div class="metadata-value"><a href="https://data.gov.my/data-catalogue/hies_state_percentile"> Monthly Income </a></div>
+                        
+                        <div class="metadata-label">Time Period:</div>
+                        <div class="metadata-value">2019-2020</div>
+                        
+                        <div class="metadata-label">Last Updated:</div>
+                        <div class="metadata-value">October 2023</div>
+                        
+                        <div class="metadata-label">Analyst:</div>
+                        <div class="metadata-value">Lim Jun Kee</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="pure-g">
+            <div class="pure-u-1-1">
+                <h3 class="subsection-title">Malaysia's Average Income Change Waterfall Chart</h3>
+                <div id="vis5" class="vis-container"></div>
+                <div class="analysis-section">
+                    <h3 class="subsection-title">Malaysia's Income Fluctuations: A Year of Economic Volatility</h3>
+                    
+                    <p>The waterfall chart illustrates Malaysia's average income changes throughout 2019, revealing a year of significant economic volatility:</p>
+                    
+                    <ul>
+                        <li><span class="key-insight">Strong Start, Volatile Finish:</span> The year began with a substantial income increase in February (+1260), followed by fluctuations. However, the latter half of the year saw more decreases than increases, culminating in a sharp decline in December (-1550).</li>
+                        
+                        <li><span class="key-insight">Peak and Trough:</span> August marked the highest point (10015), showing a significant increase (+1030), while December ended at the lowest point (6495), indicating a dramatic downturn in average income.</li>
+                        
+                        
+                        <li><span class="key-insight">Policy Considerations:</span> These fluctuations underscore the need for balanced nationwide growth strategies. Policymakers may need to consider:
+                            <ul>
+                                <li>Initiatives to boost lagging regions, reducing dependency on a few economic hubs.</li>
+                                <li>Measures to stabilize incomes, particularly in more vulnerable sectors or regions.</li>
+                                <li>Strategies to diversify the economy, potentially reducing the impact of sector-specific downturns.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+
+                </div>
+            </div>
+        </div>
+
+        <div class="metadata">
+            <h3>Metadata</h3>
+            <div class="metadata-grid">
+                <div class="metadata-label">Data Source:</div>
+                <div class="metadata-value"><a href="https://data.gov.my/data-catalogue/hies_state_percentile"> Monthly Income </a></div>
+                
+                <div class="metadata-label">Time Period:</div>
+                <div class="metadata-value">2019-2020</div>
+                
+                <div class="metadata-label">Last Updated:</div>
+                <div class="metadata-value">October 2023</div>
+                
+                <div class="metadata-label">Analyst:</div>
+                <div class="metadata-value">Lim Jun Kee</div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

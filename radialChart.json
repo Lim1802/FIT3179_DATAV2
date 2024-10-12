@@ -1,0 +1,110 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A radial plot showing the top 6 states by average income.",
+    "width": 900,
+    "height": 700,
+    "data": [
+      {
+        "name": "table",
+        "url": "top_6_states_by_income.csv",
+        "format": {"type": "csv", "parse": {"income": "number"}},
+        "transform": [{"type": "pie", "field": "income"}]
+      }
+    ],
+    "scales": [
+      {
+        "name": "r",
+        "type": "sqrt",
+        "domain": {"data": "table", "field": "income"},
+        "zero": true,
+        "range": [50, 300]
+      },
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": {"data": "table", "field": "State"},
+        "range": ["#ed7d31", "#ffd966", "#4bacc6", "#92cddc", "#b08655", "#f9e555"]
+      }
+    ],
+    "marks": [
+      {
+        "type": "arc",
+        "from": {"data": "table"},
+        "encode": {
+          "enter": {
+            "x": {"signal": "width / 2"},
+            "y": {"signal": "height / 2"},
+            "startAngle": {"field": "startAngle"},
+            "endAngle": {"field": "endAngle"},
+            "innerRadius": {"value": 50},
+            "outerRadius": {"scale": "r", "field": "income"},
+            "stroke": {"value": "#fff"}
+          },
+          "update": {
+            "fill": {"scale": "color", "field": "State"},
+            "tooltip": {
+              "signal": "{'State': datum.State, 'Income': format(datum.income, ',.2f')}"
+            }
+          },
+          "hover": {
+            "fill": {"value": "pink"}
+          }
+        }
+      },
+      {
+        "type": "text",
+        "from": {"data": "table"},
+        "encode": {
+          "enter": {
+            "x": {"signal": "width / 2"},
+            "y": {"signal": "height / 2"},
+            "radius": {"scale": "r", "field": "income", "offset": 10},
+            "theta": {"signal": "(datum.startAngle + datum.endAngle) / 2"},
+            "fill": {"value": "#000"},
+            "align": {"value": "center"},
+            "baseline": {"value": "middle"},
+            "text": {"field": "State"},
+            "fontSize": {"value": 18},
+            "fontWeight": {"value": "bold"}
+          }
+        }
+      }
+    ],
+    "legends": [
+      {
+        "fill": "color",
+        "title": "State",
+        "orient": "right",
+        "rowPadding": 10,
+        "labelFontSize": 8,
+        "titleFontSize": 16,
+        "encode": {
+          "symbols": {
+            "update": {
+              "shape": {"value": "circle"},
+              "size": {"value": 100}
+            }
+          },
+          "labels": {
+            "update": {
+              "fontSize": {"value": 12},
+              "fontWeight": {"value": "bold"}
+            }
+          }
+        }
+      }
+    ],
+
+    "config": {
+      "background": "#f3f3f3",
+
+      "legend": {
+        "offset": 20,
+        "padding": 20,
+        "titlePadding": 10,
+        "columnPadding": 10,
+        "rowPadding": 10,
+        "layoutAlign": "left"
+      }
+    }
+  }

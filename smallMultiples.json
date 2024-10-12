@@ -1,0 +1,90 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "cleaned_data_2020_2022.csv"},
+  "vconcat": [
+    { 
+      "height": 100,
+      "layer": [
+        {
+          "title": {
+            "text": "Malaysia Birth Rates by Ethnicity and Gender",
+            "fontSize": 25,
+            "subtitle": "Birth rates per 1,000 population, 2020-2022",
+            "subtitlePadding": 10,
+            "subtitleFontSize": 18,
+            "subtitleColor": "#373330",
+            "dy": 75
+          },
+          "mark": "text"
+        }
+      ]
+    },
+    {
+      "facet": {"column": {"field": "date", "type": "ordinal"}},
+      "spec": {
+        "width": 253,
+        "height": 300,
+        "layer": [
+          {
+            "mark": "bar",
+            "encoding": {
+              "x": {"field": "ethnicity", "type": "nominal", "axis": {"labelAngle": -45}},
+              "y": {"field": "rate", "type": "quantitative", "title": "Birth Rate"},
+              "color": {
+                "field": "sex",
+                "type": "nominal",
+                "scale": {
+                  "domain": ["male", "female", "both"],
+                  "range": ["#31C0D0", "#F1A957", "#605A56"]
+                }
+              },
+              "tooltip": [
+                {"field": "ethnicity", "type": "nominal"},
+                {"field": "sex", "type": "nominal"},
+                {"field": "rate", "type": "quantitative", "format": ".1f"}
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "spacing": 40,
+  "config": {
+    "background": "#e8f4f8",
+    "padding": {"top": 20, "bottom": 20, "left": 10, "right": 110},
+    "view": {"stroke": null},
+    "font": "Outfit",
+    "axis": {
+      "labelFont": "Signika Negative",
+      "labelFontSize": 11,
+      "title": null
+    },
+    "header": {
+      "labelAlign": "left",
+      "labelAngle": 0,
+      "labelFontSize": 16,
+      "labelPadding": 20,
+      "title": null
+    },
+    "legend": {
+      "orient": "none",
+      "direction": "horizontal",
+      "symbolType": "square",
+      "symbolSize": 400,
+      "clipHeight": 8,
+      "symbolStrokeColor": "transparent",
+      "labelFontSize": 13,
+      "labelColor": "#373330",
+      "title": null,
+      "legendX": 0,
+      "legendY": 110
+    },
+    "rect": {"align": "left", "color": "black"},
+    "title": {"anchor": "start"},
+    "facet": {
+      "spacing": 60,
+      "columns": 3
+    }
+  }
+}

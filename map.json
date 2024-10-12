@@ -1,0 +1,155 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 990,
+  "height": 600,
+  "title": {
+        "text": ["MALAYSIAN DISTRICTS", "POPULATION", "2020 to 2023"],
+        "font": "Georgia",
+        "fontSize": 40
+      },
+  "projection": {"type": "mercator"},
+  "layer": [
+
+      {
+            "data": {
+            "url": "mergeGraticuleOcean.json",
+            "format": {
+                "type": "topojson",
+                "feature": "ne_50m_ocean"
+            }
+            },
+            "mark": {
+            "type": "geoshape",
+            "fill": "#a0c4ff"
+            }
+      },
+
+
+
+    {
+        "data": {
+          "url": "mergeGraticuleOcean.json",
+          "format": {
+            "type": "topojson",
+            "feature": "ne_10m_admin_0_countries"
+          }
+        },
+        "transform": [
+          {
+            "lookup": "properties.NAME",
+            "from": {
+              "data": {
+                "url": "mergeGraticuleOcean.json"
+              },
+              "key": "Country",
+              "fields": ["population"]
+            }
+          },
+          {
+            "calculate": "datum.population ? datum.population : 'Data not available'",
+            "as": "Population Info"
+          }
+        ],
+        "mark": {
+          "type": "geoshape",
+          "fill": "lightgrey",
+          "stroke": "black",
+          "strokeWidth": 1.5 
+        },
+        "encoding": {
+          "tooltip": [
+            {"field": "properties.NAME", "type": "nominal", "title": "Country"},
+            {"field": "Population Info", "type": "nominal"}
+          ]
+        }
+      },
+
+
+      {
+          "data": {
+              "url": "modified_population_data_intense.csv"
+          },
+          "transform": [
+              {"calculate": "datum.population ", "as": "populationT"},
+              {"calculate": "datum.population / 1000", "as": "population"},
+              {"filter": "datum.year == year"},
+              {
+                  "lookup": "district",
+                  "from": {
+                      "data": {
+                          "url": "malaysia-states2.json",
+                          "format": {"type": "topojson", "feature": "MYSADM2gbOpen"}
+                      },
+                      "key": "properties.shapeName"
+                  },
+                  "as": "geo"
+              }
+          ],
+          "mark": {
+              "type": "geoshape",
+              "stroke": "#000080",
+              "strokeWidth": 1.5,
+              "strokeOpacity": 0.8
+          },
+          "encoding": {
+              "shape": {"field": "geo", "type": "geojson"},
+              "color": {
+                  "field": "population",
+                  "type": "quantitative",
+                  "scale": {
+                      "type": "sqrt",
+                      "scheme": "oranges",
+                      "reverse": false
+                  },
+                  "title": "Population percentage"
+              },
+              "tooltip": [
+                  {"field": "district", "type": "nominal", "title": "District"},
+                  {"field": "population", "type": "quantitative", "title": "Population%", "format": ",.2f"},
+                  {"field": "populationT", "type": "quantitative", "title": "Population('000')"},
+                  {"field": "year", "type": "quantitative", "title": "Year"}
+              ]
+          }
+      }
+  ],
+  "params": [
+      { 
+          "name": "year", 
+          "value": 2020,
+          "bind": {"input": "range", "min": 2020, "max": 2023, "step": 1}
+      }
+  ],
+  "config": {
+    "padding": {"top": 20, "left": 20, "right": 80},
+    "background": "#a0c4ff",
+    "legend": {
+      "orient": "none",
+      "direction": "horizontal",
+      "legendX": 0,
+      "legendY": 570,
+      "gradientLength": 300,
+      "labelFont": "Sans Serif",
+      "labelFontSize": 14,
+      "labelColor": "black",
+      "titleFont": "Sans Serif",
+      "titleFontSize": 16,
+      "titleFontWeight": "lighter",
+      "titleColor": "black",
+      "titleLimit": 300
+    },
+    "projection": {
+      "type": "mercator",
+      "scale": 2200
+    },
+    "title": {
+      "anchor": "start",
+      "color": "black",
+      "subtitlePadding": 30,
+      "subtitleFont": "Calibri",
+      "subtitleFontSize": 15,
+      "subtitleFontWeight": "lighter",
+      "subtitleColor": "black"
+    },
+    "view": {"stroke": null}
+  }
+}
