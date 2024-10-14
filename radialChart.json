@@ -23,7 +23,7 @@
         "name": "color",
         "type": "ordinal",
         "domain": {"data": "table", "field": "State"},
-        "range": ["#ed7d31", "#ffd966", "#4bacc6", "#92cddc", "#b08655", "#f9e555"]
+        "range": ["#ed7d31", "#ffd966", "#4bacc6", "#90bf5e", "#b08655", "#f9e555"]
       }
     ],
     "marks": [
